@@ -11,6 +11,7 @@ export const useWallet = () => useState("wallet", () => null);
 export const useAccount = () => useState("account", () => null);
 export const useSpendable = () => useState("spendable", () => 0);
 export const useAnsaddr = () => useState("ansaddr", () => null);
+export const useMessages = () => useState("messages", () => []);
 
 // Arweave
 export const useArweave = () => useState("arweave", () => null);
