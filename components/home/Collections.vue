@@ -1,19 +1,8 @@
 <template>
     <div class="flex flex-col align-start justify-start w-full flex-1 mx-auto py-10 w-[85vw] max-w-[1740px]">
-        <div
-            v-if="isError"
-            class="relative"
-        >
-            <ToasterMessage 
-                message="an error occurred"
-            />
-        </div>
-        <div 
-            v-else
-            class="flex flex-col justify-center items-center h-full mx-0 mt-32"
-        >
-            <div class="relative flex flex-col justify-evenly items-start w-full h-full my-16 mx-auto max-w-[85vw]">
-                <h2 class="text-white text-left text-4xl font-semibold p-2 Amazing--red">
+        <div class="flex flex-col justify-center items-center h-full mx-0 mt-32">
+            <div class="relative flex flex-col justify-evenly items-start w-full h-full my-16 mx-auto">
+                <h2 class="text-white text-left max-w-[85vw] text-4xl font-semibold p-2 Amazing--red">
                     Top collections
                 </h2>
                 <p class="text-1xl text-start my-4 p-2">

@@ -25,7 +25,7 @@
       </template>
     </div>
     <div class="inline-flex flex-row flex-wrap overflow-auto items-center justify-center content-center">
-      <NftCard v-for="nft in nfts.result" :key="nft.contractTxId" :nft="nft" :disposable="account && account.addr && state.admins.includes(account.addr)
+      <NftCard v-for="nft in nfts" :key="nft.id" :nft="nft" :disposable="account && account.addr && state.admins.includes(account.addr)
         " @remove-item="deleteNFT"></NftCard>
     </div>
   </div>
@@ -48,27 +48,30 @@
 const { Warp, Contract, WarpFactory } = await import("warp-contracts");
 import { useAccount, useArweave } from "../../composables/useState";
 import setArweave from "../../plugins/arweave";
+import b64urlEncode from 'base64url-encode'
 
 const arweave = useArweave().value;
 if (!arweave)
-    setArweave();
+  setArweave();
 
 const account = useAccount();
 
 let collectionId = useRoute().params.id || useRoute().hash.slice(1);
+let state = ref(
+  (await $fetch("https://glome.rareweave.store/state/" + collectionId))
+);
+
 let nfts = ref(
   await $fetch(
-    "https://prophet.rareweave.store/nfts?collection=" + collectionId
+    `https://glome.rareweave.store/contracts-under-code/hcszckSXA5GTg6zg65nk6RQtT4aRHDzyxOOoD6DEGxg?expandStates=true&filterScript=` +
+    b64urlEncode(`id⊂${JSON.stringify(state.value.items)}`)
   )
 );
 let searchCondition = ref("");
 let forSaleOnly = ref(false);
 let addModalOpened = ref(false);
 let nftBeingAdded = ref("");
-let state = ref(
-  (await $fetch("https://prophet.rareweave.store/contract?id=" + collectionId))
-    .state
-);
+
 const warp = WarpFactory.forMainnet(
   {
     inMemory: true,
@@ -96,9 +99,9 @@ let nftContract = account.value
   });
 async function refreshResults() {
   nfts.value = await $fetch(
-    `https://prophet.rareweave.store/nfts?collection=${collectionId}&${searchCondition.value ? "&search=" + searchCondition.value : ""
-    }${forSaleOnly.value ? "&forSaleOnly=true" : ""}`
-  );
+    `https://glome.rareweave.store/contracts-under-code/hcszckSXA5GTg6zg65nk6RQtT4aRHDzyxOOoD6DEGxg?expandStates=true&filterScript=` +
+    b64urlEncode(`id⊂${JSON.stringify(state.value.items)}`)
+  )
 }
 async function add() {
   let newNfts = nftBeingAdded.value.split(" ");
@@ -115,10 +118,8 @@ async function add() {
   });
   addModalOpened.value = false;
   state.value = (
-    await fetch(
-      "https://prophet.rareweave.store/contract?id=" + collectionId
-    ).then((res) => res.json())
-  ).state;
+    (await $fetch("https://glome.rareweave.store/state/" + collectionId))
+  )
   refreshResults();
 }
 async function deleteNFT(contract) {
@@ -126,7 +127,7 @@ async function deleteNFT(contract) {
     function: "remove-item",
     item: contract,
   });
-  nfts.value.result = nfts.value.result.filter(
+  nfts.value = nfts.value.filter(
     (nft) => nft.contractTxId != contract
   );
 }

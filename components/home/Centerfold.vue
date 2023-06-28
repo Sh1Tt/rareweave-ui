@@ -1,10 +1,10 @@
 <template>
     <div class="flex flex-col items-center justify-start w-full flex-1 mx-auto py-10"
-        style="background: radial-gradient(rgba(0,0,0,.75), rgba(0,0,0,.75)), url(/s23-00.jpg); background-position: center; background-size: cover; background-repeat: no-repeat;">
+        :style="{ background: `radial-gradient(rgba(0,0,0,.75), rgba(0,0,0,.75)), url('${centerfoldImage}')`, 'backgroundPosition': 'center', 'backgroundSize': 'cover', 'backgroundRepeat': 'no-repeat' }">
         <div class="relative flex flex-wrap justify-start items-start h-full mt-32">
             <div class="Column flex-row justify-start align-center w-100 max-w-[600px]">
                 <div class="Header max-w-[85vw]">
-                    <h1 class="text-white text-left text-2xl lg:text-5xl font-semibold justify-center text-center">
+                    <h1 class="text-white text-2xl lg:text-5xl font-semibold justify-center text-center">
                         A liquid market on <br />Arweave
                     </h1>
                     <p class="flex justify-center text-center mt-8">
@@ -12,11 +12,15 @@
                         of just few gold ounces.
                     </p>
                     <div class="relative flex justify-around mt-8 mb-8">
-                        <NuxtLink to="/explore" class="Button --primary">
-                            Explore NFTs
+                        <NuxtLink to="/explore">
+                            <awesome-button :nonBtn="true">
+                                Explore NFTs
+                            </awesome-button>
                         </NuxtLink>
-                        <a href="#howto" class="Button">
-                            How to mint
+                        <a href="#howto">
+                            <amazing-button :nonBtn="true">
+                                How to create NFT
+                            </amazing-button>
                         </a>
                     </div>
                 </div>
@@ -104,12 +108,14 @@
 <script setup>
 import { Rows } from '~/contents/june23.js';
 const NFTwidth = 316;
+const centerfoldImage = ref(`/centerfold-images/${1 + Math.round(Math.random() * 7)}.jpg`)
 const setN = () => window.innerWidth / NFTwidth > 5 ? 5 : Math.floor(window.innerWidth / NFTwidth);
 const initialN = setN();
 const w = ref(initialN);
 window.addEventListener('resize', () => {
     w.value = setN();
 });
+
 </script>
 <style scoped>
 .Card {
