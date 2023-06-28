@@ -26,7 +26,7 @@
                                 {{ (priceTiers[index].ar).toFixed(7) }} AR
                             </span>
                             <span class="Usd">
-                                ~${{ (priceTiers[index].usd).toFixed(index === 0 ? 7 : (index < 2 ? 3 : 2)) }} USD </span>
+                                ~ ${{ (priceTiers[index].usd).toFixed(index === 0 ? 7 : (index < 2 ? 3 : 2)) }} USD </span>
                                     <span class="Winston">
                                         {{ priceTiers[index].winston }} winston
                                     </span>

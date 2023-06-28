@@ -1,5 +1,5 @@
 <template>
-    <div class="Nav">
+    <div class="Nav" id="navbar">
         <div class="View">
             <div class="Leftside">
                 <NuxtLink  class="Logo Amazing--purpl" to="/">

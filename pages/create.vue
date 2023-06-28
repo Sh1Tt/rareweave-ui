@@ -1,90 +1,179 @@
 <template>
-  <form v-if="!uploading" class="h-full-navbared w-full flex flex-col items-center justify-center font-mono"
-    @submit.prevent="mint">
-    <h1 class="text-3xl text-center">
-      Upload
-      <p class="rareweave-font">RareWeave</p>
-      NFT
+  <div class="relative flex flex-col justify-start items-center h-auto w-max mx-auto text-left">
+  <form 
+    v-if="!uploading" 
+    class="h-full-navbared w-full flex flex-col items-start justify-center bg-[rgba(17,23,32,.2)] rounded-[2.5rem] overflow-hidden mt-16"
+    style="box-shadow: 0px 1px 2px rgba(0,0,0,.12), 1px 2px 4px rgba(0,0,0,.1), 2px 4px 8px rgba(0,0,0,.09), 3px 6px 12px rgba(0,0,0,.09), -1px -2px 8px rgba(0,0,0,.07);"
+    @submit.prevent="mint"
+  >
+    <h1 class="text-4xl font-bold w-full mt-16` px-16">
+      Create a new NFT
     </h1>
-    <div class="flex items-center justify-center w-full md:w-96 m-4 pt-4 px-4">
-      <label for="dropzone-file"
-        class="flex flex-col items-center justify-center w-full min-h-64 border-2 border-dashed rounded-lg cursor-pointer bg-base-300 hover:bg-base-200 border-zinc-800">
-        <div class="flex flex-col items-center justify-center pt-5 pb-6">
-          <svg v-if="!imageObjectUrl" aria-hidden="true" class="w-10 h-10 mb-3 mt-3 text-gray-400" fill="none"
-            stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-          </svg>
-          <template v-else>
-            <img v-if="fileMeta?.type?.startsWith('image')" :src="imageObjectUrl" class="inline-flex" />
-            <video v-else-if="fileMeta?.type?.startsWith('video')" autoplay muted controls>
-              <source :src="imageObjectUrl" :type="fileMeta.type" />
+
+    <div class="flex flex-col items-start justify-center mt-16 px-16">
+      <p class="mb-2 mt-4 text-sm text-gray-500 dark:text-gray-400">
+        Click here to upload, or drag and drop your NFT content:
+      </p>
+      <label 
+        for="dropzone-file"
+        class="flex flex-col justify-center items-center w-[316px] aspect-[16/9] border-2 border-dashed rounded-lg cursor-pointer hover:bg-base-200 border-[rgba(234,245,255,.8)] bg-[rgba(3,5,9,0)]"
+      >
+        <div class="flex flex-col items-start justify-center pt-5 pb-6">
+          
+          <span
+            v-if="!imageObjectUrl" 
+          >
+            <img src="file-image.png" class="w-16 h-16" />
+          </span>
+          <template 
+            v-else
+          >
+            <img 
+              v-if="fileMeta?.type?.startsWith('image')" 
+              :src="imageObjectUrl" 
+              class="inline-flex"
+            />
+            <video 
+              v-else-if="fileMeta?.type?.startsWith('video')" 
+              autoplay 
+              muted 
+              controls
+            >
+              <source 
+                :src="imageObjectUrl" 
+                :type="fileMeta.type"
+              />
               Your browser does not support the video tag.
             </video>
           </template>
-          <p class="mb-2 mt-4 text-sm text-gray-500 dark:text-gray-400">
-            <span class="font-semibold">Click to upload</span> or drag and drop
-          </p>
-          <p class="text-xs text-gray-500 dark:text-gray-400">
-            SVG, PNG, JPG, GIF, MP4, HTML
-          </p>
+          
         </div>
-        <input id="dropzone-file" type="file" class="hidden" required @change="uploadNftContent" />
+        <input 
+          id="dropzone-file" 
+          type="file" 
+          class="hidden" 
+          required @change="uploadNftContent" 
+        />
       </label>
+      <p class="text-xs text-gray-500 dark:text-gray-400">
+        <span>*</span>Currently supported file types: SVG, PNG, JPG, GIF, MP4, HTML
+      </p>
     </div>
-    <div class="form-control mb-2 pb-2 px-2">
-      <label class="label">
-        <span class="label-text">Enter NFT title</span>
-      </label>
-      <input v-model="title" required type="text" maxlength="40" placeholder="Name for your NFT"
-        class="input input-bordered" />
-      <label class="label">
-        <span class="label-text">Describe your NFT</span>
-      </label>
-      <textarea placeholder="NFT description" v-model="description"
-        class="textarea textarea-bordered textarea-xs w-full max-w-xs"></textarea>
-      <label class="label">
-        <span class="label-text">Enter NFT price</span>
-      </label>
-      <label class="input-group">
-        <input v-model="price" type="number" placeholder="0,5" step="0.01" class="input input-bordered" />
-        <span class="w-12 text-center justify-center">AR</span>
-      </label>
-      <label class="label">
-        <span class="label-text">Enter royalty</span>
-      </label>
-      <label class="input-group">
-        <input v-model="royalty" type="number" required placeholder="3" step="0.1" class="input input-bordered" />
-        <span class="w-12 text-center justify-center">%</span>
-      </label>
-      <label class="label">
-        <span class="label-text">Collection
-          <NuxtLink to="/collection/create" class="text-[#fc466b]">(Create Collection)</NuxtLink>
+    <div class="form-control">
+      <label class="label flex flex-col justify-start items-start mt-8 mx-16">
+        <span class="text-xl font-bold">
+          Name
         </span>
       </label>
-      <label class="input-group">
-        <input v-model="collectionId" type="text" placeholder="Collection" class="input input-bordered" />
-        <span class="w-12 text-center justify-center">ID</span>
+      <input 
+        v-model="title" 
+        required type="text" 
+        maxlength="40" 
+        class="mx-16 bg-[rgba(17,23,32,1)] text-white py-3 px-6 rounded-lg bg-[rgba(3,5,9,0)] outline-none focus:outline-none border-2 border-base-100 focus:border-base-200 transition-colors duration-200 w-full" 
+        placeholder="Enter the name of your NFT"
+      />
+      <label class="label flex flex-col justify-start items-start mt-8 mx-16">
+        <span class="text-xl font-bold">
+          Description
+        </span>
       </label>
-      <label class="cursor-pointer label my-2 mx-0 pr-0">
-        <span class="label-text">For sale</span>
-        <input type="checkbox" class="toggle toggle-accent" checked v-model="forSale" />
+      <textarea 
+        placeholder="Enter a detailed description of your NFT. (max 500 characters)" 
+        v-model="description"
+        class="mx-16 bg-[rgba(17,23,32,1)] text-white py-3 px-6 rounded-lg bg-[rgba(3,5,9,0)] outline-none focus:outline-none min-h-[128px] border-2 border-base-100 focus:border-base-200 transition-colors duration-200 w-full"
+      ></textarea>
+      <label class="label flex flex-col justify-start items-start mt-8 mx-16">
+        <span class="text-xl font-bold">
+          Price
+        </span>
       </label>
-      <button type="submit" class="Button Amazing--button">
+      <label class="input-group mx-16">
+        <input 
+          v-model="price" 
+          type="number" 
+          placeholder="0,5" 
+          step="0.01" 
+          class="bg-[rgba(17,23,32,1)] text-white py-3 px-6 rounded-lg bg-[rgba(3,5,9,0)] outline-none focus:outline-none border-2 border-base-100 focus:border-base-200 transition-colors duration-200 flex-1"
+        />
+        <span class="w-12 text-center justify-center">
+          AR
+        </span>
+      </label>
+      <label class="label flex flex-col justify-start items-start mt-8 px-16">
+        <span class="text-xl font-bold">
+          Set royalty
+        </span>
+      </label>
+      <label class="input-group mx-16">
+        <input 
+          v-model="royalty" 
+          type="number" 
+          required placeholder="3" 
+          step="0.1" 
+          class="bg-[rgba(17,23,32,1)] text-white py-3 px-6 rounded-lg bg-[rgba(3,5,9,0)] outline-none focus:outline-none border-2 border-base-100 focus:border-base-200 transition-colors duration-200 flex-1"
+        />
+        <span class="w-12 text-center justify-center">
+          %
+        </span>
+      </label>
+      <label class="label flex flex-col justify-start items-start mt-8 px-16">
+        <span class="text-xl font-bold">
+          Collection
+        </span>
+        <span class="p-2">
+          (On rareweave a collection is defined as a group of NFTs that you own rather than a group of NFTs that you create.)
+          <NuxtLink
+            to="/collection/create" 
+            class="text-[#fc466b] hover:underline transition-colors duration-200 ease-in-out"
+          >
+            Click here to create a new collection.
+          </NuxtLink>
+        </span>
+      </label>
+      <label class="input-group mx-16">
+        <input 
+          v-model="collectionId"
+          type="text" 
+          placeholder="Collection" 
+          class="bg-[rgba(17,23,32,1)] text-white py-3 px-6 rounded-lg bg-[rgba(3,5,9,0)] outline-none focus:outline-none border-2 border-base-100 focus:border-base-200 transition-colors duration-200 flex-1"
+        />
+        <span class="w-12 text-center justify-center">
+          ID
+        </span>
+      </label>
+      <label class="cursor-pointer label my-2 mx-0 pr-0 mt-8 mx-16 w-full">
+        <span class="text-xl font-bold">
+          For sale
+        </span>
+        <input 
+          type="checkbox"
+          class="toggle toggle-accent" 
+          checked v-model="forSale" 
+        />
+      </label>
+      <button 
+        type="submit" 
+        class="Button Amazing--button mt-8 mx-16 w-min px-16 py-4 text-xl font-bold"
+      >
         Mint!
       </button>
     </div>
   </form>
-  <div v-else class="h-full-navbared w-full flex flex-col items-center justify-center font-mono">
+  <div  
+    v-else 
+    class="h-full-navbared w-full flex flex-col items-center justify-center font-mono"
+  >
     <div class="loading-wrapper h-20 m-2 flex items-center justify-center">
       <div class="loading"></div>
     </div>
-    <h1 class="text-2xl text-mono m-2">Uploading your NFT...</h1>
+    <h1 class="text-2xl text-mono m-2">
+        Uploading your NFT..
+    </h1>
     <p class="text-sm text-center text-zinc-400">
-      Wait few minutes for your NFT to be mined. <br />
-      You may take coffee, sit back and relax. It will take at least 1 Arweave
-      block (~2 minutes).
+      Wait few minutes for your NFT to be mined.
+      You may take coffee, sit back and relax. It will take at least 1 Arweave block (~2 minutes).
     </p>
+  </div>
   </div>
 </template>
 <script setup>
@@ -140,18 +229,15 @@ async function uploadNftContent(e) {
 }
 
 function readAsArrayBuffer(file) {
-  return new Promise((resolve) => {
-    let reader = new FileReader();
-    reader.addEventListener(
-      "load",
-      () => {
-        resolve(reader.result);
-      },
-      false
-    );
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      resolve(reader.result);
+    }, false);
     reader.readAsArrayBuffer(file);
   });
-}
+};
+
 async function mint() {
   let initState = {
     owner: account.value.addr,
@@ -170,6 +256,7 @@ async function mint() {
     reservationBlockHeight: 0,
     royalty: royalty.value / 100,
   };
+  
   uploading.value = true;
   let tx = await arweave.createTransaction({
     data: Buffer.from(new Uint8Array(nftContent)),
@@ -295,21 +382,4 @@ function encodeTags(tags) {
 }
 </script>
 <style scoped>
-.Button {
-  margin: 0;
-}
-
-@keyframes amazing-bg {
-  from {
-    background-position-x: 0%;
-  }
-
-  50% {
-    background-position-x: 200%;
-  }
-
-  to {
-    background-position-x: 0%;
-  }
-}
 </style>

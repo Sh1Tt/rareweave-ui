@@ -16,6 +16,6 @@
 </template>
 
 <script setup>
-let wallet = useState("wallet", () => null);
-// router.push("#connectWallet");
+import { useWallet } from "../composables/useState";
+const wallet = useWallet();
 </script>
