@@ -13,7 +13,7 @@
                 </p>
             </div>
             <div class="Tiers">
-                <div v-for="(size, index) in Object.keys(Size)" class="Tier --observe">
+                <div v-for="(size, index) in Object.keys(Size)" class="Tier m-2 --observe">
                     <span class="Tier__title">
                         Per {{ size }}
                     </span>
@@ -41,7 +41,8 @@
                 </p>
                 <div
                     class="relative flex flex-row flex-wrap justify-start items-center max-w-[820px] rounded-3xl bg-[rgba(17,23,32,1)]">
-                    <div class="relative flex flex-col justify-start items-start flex-[0.75_0.75_0px] h-auto m-4 min-w-[286px]">
+                    <div
+                        class="relative flex flex-col justify-start items-start flex-[0.75_0.75_0px] h-auto m-4 min-w-[286px]">
                         <h4 class="m-8 text-3xl font-semibold text-white">
                             Arweave ${{ rates.arweave?.usd?.toFixed(2) }}
                         </h4>
@@ -100,15 +101,18 @@ import { useRates } from '../../composables/useState';
 
 const rates = useRates();
 
-const priceTiers = ref([]);
-const isLoadingTiers = ref(false);
+const 
+    priceTiers = ref([]),
+    isLoadingTiers = ref(false);
 
-const quantity = ref(0);
-const size = ref(0);
-const sizeUnit = ref('KB');
+const 
+    quantity = ref(0),
+    size = ref(0),
+    sizeUnit = ref('KB');
 
-const collectionPrice = ref(0);
-const collectionSizeInBytes = ref(0);
+const 
+    collectionPrice = ref(0),
+    collectionSizeInBytes = ref(0);
 
 const Size = {
     KB: 1024,
@@ -167,8 +171,8 @@ async function fetchPricing(size) {
         method: 'GET',
         mode: 'cors'
     };
-    const res = await fetch(`https://arweave.net/price/` + size, options);
-    const data = await res.json();
+    const data = await $fetch(`https://arweave.net/price/` + size, options);
+
     return data / 1000000000000 * rates.value.arweave.usd;
 };
 
@@ -178,8 +182,8 @@ async function handleSubmit() {
     const u = sizeUnit.value.selectedOptions[0].value;
     const sizeInBytes = Size[u] * s;
     const totalSizeInBytes = sizeInBytes * q;
-    console.log(sizeInBytes, totalSizeInBytes / Size.MB)
     const price = await fetchPricing(parseInt(Math.round(totalSizeInBytes)));
+
     collectionPrice.value = price;
     collectionSizeInBytes.value = totalSizeInBytes;
 };
@@ -201,6 +205,7 @@ onMounted(async () => {
     width: 100%;
     height: 100%;
     margin: 5rem auto 0;
+    gap: 2rem;
     padding: 0;
     transform-style: preserve-3d;
 }

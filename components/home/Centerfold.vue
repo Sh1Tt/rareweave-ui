@@ -4,7 +4,7 @@
         <div class="relative flex flex-wrap justify-start items-start h-full mt-32">
             <div class="Column flex-row justify-start align-center w-100 max-w-[600px]">
                 <div class="Header max-w-[85vw]">
-                    <h1 class="text-white text-2xl lg:text-5xl font-semibold justify-center text-center">
+                    <h1 class="text-white text-3xl sm:text-4xl lg:text-5xl font-semibold justify-center text-center">
                         A liquid market on <br />Arweave
                     </h1>
                     <p class="flex justify-center text-center mt-8 text-lg">
@@ -98,29 +98,11 @@ import Tag from '~/components/Tag.vue';
 import CenterfoldCard from '~/components/CenterfoldCard.vue';
 import { Rows } from '~/contents/june23.js';
 const NFTwidth = 316;
-const centerfoldImage = ref(`/centerfold-images/${1 + Math.round(Math.random() * 5)}.jpg`)
-const setN = () => window.innerWidth / NFTwidth > 5 ? 5 : Math.floor(window.innerWidth / NFTwidth);
-const initialN = setN();
-const w = ref(initialN);
+const centerfoldImage = ref(`/centerfold-images/${Math.round(Math.random() * 5) + 1}.jpg`)
+const setW = () => window.innerWidth / NFTwidth > 5 ? 5 : Math.floor(window.innerWidth / NFTwidth);
+const initialValue = setW();
+const w = ref(initialValue);
 window.addEventListener('resize', () => {
-    w.value = setN();
+    w.value = setW();
 });
-
 </script>
-<style scoped>
-.Card {
-    position: relative;
-    flex: 1 1 0px;
-    max-width: 316px;
-    min-width: 268px;
-    border-radius: .75rem;
-    overflow: hidden;
-    aspect-ratio: 1/1;
-    transform: translateY(0px);
-}
-
-.Card:hover {
-    transform: translateY(-10px);
-    transition: transform .25s ease-in-out;
-}
-</style>
