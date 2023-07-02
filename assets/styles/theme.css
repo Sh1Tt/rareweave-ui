@@ -25,8 +25,7 @@
 
     --content-width: calc((100%) - var(--page-spacing) * 2);
     
-    --font-primary: 'Noto Sans', sans-serif;
-    --font-secondary: 'Iosevka Aile Web', monospace;
+    --font-primary: 'Iosevka Aile Web', monospace;
 }
 
 /* Structural components */
@@ -39,24 +38,15 @@
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden !important;
     overflow-y: scroll !important;
+    font-family: var(--font-primary);
 }
 
 input,
 textarea,
 select,
 button {
-    font-family: var(--font-secondary);
     @apply bg-[rgba(48,56,63,0.5)] rounded-lg;
 }
-
-h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-secondary) !important;
-}
-
-p {
-    font-family: var(--font-secondary);
-}
-
 
 /* Amazing Section */
 .Amazing-text,
